@@ -1,0 +1,6 @@
+CREATE TABLE weather (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    location VARCHAR(255),
+    temperature DOUBLE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

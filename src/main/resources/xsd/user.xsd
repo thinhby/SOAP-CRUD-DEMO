@@ -1,0 +1,30 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://soap.demo.com/user"
+           xmlns:tns="http://soap.demo.com/user"
+           elementFormDefault="qualified">
+
+    <!-- ===================== -->
+    <!-- REGISTER REQUEST -->
+    <!-- ===================== -->
+    <xs:element name="RegisterUserRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="username" type="xs:string"/>
+                <xs:element name="password" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- ===================== -->
+    <!-- REGISTER RESPONSE -->
+    <!-- ===================== -->
+    <xs:element name="RegisterUserResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:long"/>
+                <xs:element name="username" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

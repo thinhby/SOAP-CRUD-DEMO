@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Home - Weather</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <a href="/logout" class="logout-btn">Logout</a>
+    </div>
+
+    <!-- MAIN BOX -->
+    <div class="weather-box">
+
+        <div class="title">🌤 Weather System</div>
+
+        <h2>Enter Weather Data</h2>
+
+        <form method="post" action="/weather/save">
+
+            <input name="city" placeholder="City (e.g. Tokyo)">
+            <input name="temperature" placeholder="Temperature (°C)">
+            <input name="humidity" placeholder="Humidity (%)">
+            <input name="description" placeholder="Description (Sunny, Rainy...)">
+
+            <button type="submit">Save Weather</button>
+
+        </form>
+
+    </div>
+
+</body>
+
+</html>

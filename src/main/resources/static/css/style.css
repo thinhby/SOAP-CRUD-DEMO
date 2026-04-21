@@ -1,0 +1,124 @@
+/* ===== GLOBAL ===== */
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+}
+
+/* ===== CARD ===== */
+.box, .weather-box {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    width: 380px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    text-align: center;
+}
+
+/* ===== TITLE ===== */
+h2 {
+    margin-bottom: 20px;
+}
+
+/* TOP BAR */
+.top-bar {
+    position: fixed;
+    top: 15px;
+    right: 20px;
+}
+
+/* LOGOUT BUTTON */
+.logout-btn {
+    background: #ff4d4d;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.logout-btn:hover {
+    background: #e60000;
+}
+
+/* ===== INPUT ===== */
+input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    outline: none;
+}
+
+/* focus đẹp */
+input:focus {
+    border-color: #4facfe;
+    box-shadow: 0 0 5px rgba(79,172,254,0.4);
+}
+
+/* ===== BUTTON ===== */
+button {
+    width: 100%;
+    padding: 12px;
+    background: #4facfe;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #00c6ff;
+}
+
+/* ===== LINK ===== */
+a {
+    display: block;
+    margin-top: 10px;
+    color: #4facfe;
+    text-decoration: none;
+}
+
+/* ===== WEATHER FORM EXTRA ===== */
+.weather-box {
+    width: 420px;
+}
+
+/* ===== TITLE SMALL ===== */
+.title {
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+/* ===== LOGOUT ===== */
+.logout {
+    margin-top: 15px;
+}
+
+.logout a {
+    color: red;
+}
+
+/* ===== ERROR / SUCCESS ===== */
+.error {
+    color: red;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.success {
+    color: green;
+    font-size: 14px;
+    margin-bottom: 10px;
+}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+    <div class="login-box">
+
+        <h2>Login</h2>
+
+        <!-- 👇 ERROR MESSAGE -->
+        <div class="error" id="error" style="display:none;">
+            Invalid username or password
+        </div>
+
+        <form method="post" action="/login">
+            <input name="username" placeholder="Username" />
+            <input name="password" type="password" placeholder="Password" />
+            <button type="submit">Login</button>
+        </form>
+
+        <a class="link" href="/register">Go Register</a>
+
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        if (params.has("error")) {
+            document.getElementById("error").style.display = "block";
+        }
+    </script>
+
+</body>
+
+</html>

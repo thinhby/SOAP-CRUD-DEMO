@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://soap.demo.com/weather"
+           xmlns:tns="http://soap.demo.com/weather"
+           elementFormDefault="qualified">
+
+    <!-- Weather Entity -->
+    <xs:complexType name="Weather">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="location" type="xs:string"/>
+            <xs:element name="temperature" type="xs:double"/>
+            <xs:element name="createdAt" type="xs:string" minOccurs="0"/>
+            <xs:element name="updatedAt" type="xs:string" minOccurs="0"/> 
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- CREATE -->
+    <xs:element name="CreateWeatherRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="location" type="xs:string"/>
+                <xs:element name="temperature" type="xs:double"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="CreateWeatherResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="weather" type="tns:Weather"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- GET BY ID -->
+    <xs:element name="GetWeatherRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="GetWeatherResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="weather" type="tns:Weather"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- GET ALL -->
+    <xs:element name="GetAllWeatherRequest">
+        <xs:complexType>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="GetAllWeatherResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="weathers" type="tns:Weather" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- UPDATE -->
+    <xs:element name="UpdateWeatherRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:long"/>
+                <xs:element name="location" type="xs:string"/>
+                <xs:element name="temperature" type="xs:double"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="UpdateWeatherResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="weather" type="tns:Weather"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- DELETE -->
+    <xs:element name="DeleteWeatherRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="DeleteWeatherResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="message" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>
