@@ -6,8 +6,10 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.demo.soap.weather.Weather;
+import com.demo.soap.weather.WeatherImage;
 
 import soap.crud.demo.entities.WeatherEntity;
+import soap.crud.demo.entities.WeatherImageEntity;
 import soap.crud.demo.repositories.WeatherRepository;
 
 @Service
@@ -36,6 +38,11 @@ public class WeatherService {
         repo.deleteById(id);
     }
 
+    public WeatherEntity findById(Long id) {
+        return repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Weather not found"));
+    }
+
     public WeatherEntity update(WeatherEntity entity) {
         return repo.save(entity);
     }
@@ -49,17 +56,28 @@ public class WeatherService {
         weather.setLocation(entity.getLocation());
         weather.setTemperature(entity.getTemperature());
 
-        weather.setCreatedAt(
-                entity.getCreatedAt() != null
-                        ? entity.getCreatedAt().format(DATETIME_FORMATTER)
-                        : null);
+        weather.setCreatedAt(entity.getCreatedAt() != null ? entity.getCreatedAt().format(DATETIME_FORMATTER) : null);
 
-        // updatedAt
-        weather.setUpdatedAt(
-                entity.getUpdatedAt() != null
-                        ? entity.getUpdatedAt().format(DATETIME_FORMATTER)
-                        : null);
+        weather.setUpdatedAt(entity.getUpdatedAt() != null ? entity.getUpdatedAt().format(DATETIME_FORMATTER) : null);
+
+        // 👇 map images
+        if (entity.getImages() != null) {
+            for (WeatherImageEntity img : entity.getImages()) {
+
+                WeatherImage soapImg = new WeatherImage();
+                soapImg.setId(img.getId());
+                soapImg.setFileName(img.getFileName());
+                soapImg.setPath(img.getPath());
+                soapImg.setContent(img.getContent());
+
+                weather.getImages().add(soapImg);
+            }
+        }
 
         return weather;
     }
+
+    // =================================================================
+    /////////////// private helper methods (if needed)////////////////
+    // =================================================================
 }

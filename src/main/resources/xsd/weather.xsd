@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           targetNamespace="http://soap.demo.com/weather"
-           xmlns:tns="http://soap.demo.com/weather"
-           elementFormDefault="qualified">
+<xs:schema  xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+            xmlns:xmime="http://www.w3.org/2005/05/xmlmime"
+            targetNamespace="http://soap.demo.com/weather"
+            xmlns:tns="http://soap.demo.com/weather" 
+            elementFormDefault="qualified">
+
+    <xs:complexType name="WeatherImage">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="file" type="xs:base64Binary" minOccurs="0" xmime:expectedContentTypes="image/png"/>
+            <xs:element name="fileName" type="xs:string"/>
+            <xs:element name="size" type="xs:long"/>
+            <xs:element name="path" type="xs:string"/>
+            <xs:element name="content" type="xs:string" minOccurs="0"/>
+            <xs:element name="createdAt" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
 
     <!-- Weather Entity -->
     <xs:complexType name="Weather">
@@ -11,7 +24,18 @@
             <xs:element name="location" type="xs:string"/>
             <xs:element name="temperature" type="xs:double"/>
             <xs:element name="createdAt" type="xs:string" minOccurs="0"/>
-            <xs:element name="updatedAt" type="xs:string" minOccurs="0"/> 
+            <xs:element name="updatedAt" type="xs:string" minOccurs="0"/>
+
+            <xs:element name="images" type="tns:WeatherImage" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="WeatherImageRequest">
+        <xs:sequence>
+            <xs:element name="file" type="xs:base64Binary" xmime:expectedContentTypes="image/png"/>
+            <xs:element name="fileName" type="xs:string"/>
+            <xs:element name="size" type="xs:long"/>
+            <xs:element name="content" type="xs:string" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -21,6 +45,8 @@
             <xs:sequence>
                 <xs:element name="location" type="xs:string"/>
                 <xs:element name="temperature" type="xs:double"/>
+
+                <xs:element name="images" type="tns:WeatherImageRequest" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -71,6 +97,12 @@
                 <xs:element name="id" type="xs:long"/>
                 <xs:element name="location" type="xs:string"/>
                 <xs:element name="temperature" type="xs:double"/>
+
+                <!-- delete images -->
+                <xs:element name="removeImageIds" type="xs:long" minOccurs="0" maxOccurs="unbounded"/>
+
+                <!-- add new images -->
+                <xs:element name="images" type="tns:WeatherImage" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

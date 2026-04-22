@@ -1,0 +1,23 @@
+<jaxb:bindings xmlns:jaxb="https://jakarta.ee/xml/ns/jaxb"
+               xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+               version="3.0">
+
+    <jaxb:bindings schemaLocation="../xsd/weather.xsd">
+        <jaxb:bindings node="//xsd:complexType[@name='WeatherImage']">
+            <jaxb:bindings node=".//xsd:element[@name='file']">
+                <jaxb:property>
+                    <jaxb:baseType name="jakarta.activation.DataHandler"/>
+                </jaxb:property>
+            </jaxb:bindings>
+        </jaxb:bindings>
+
+        <jaxb:bindings node="//xsd:complexType[@name='WeatherImageRequest']">
+            <jaxb:bindings node=".//xsd:element[@name='file']">
+                <jaxb:property>
+                    <jaxb:baseType name="jakarta.activation.DataHandler"/>
+                </jaxb:property>
+            </jaxb:bindings>
+        </jaxb:bindings>
+    </jaxb:bindings>
+
+</jaxb:bindings>

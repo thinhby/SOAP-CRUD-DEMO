@@ -1,5 +1,10 @@
 package soap.crud.demo.endpoints;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
@@ -15,8 +20,12 @@ import com.demo.soap.weather.GetWeatherRequest;
 import com.demo.soap.weather.GetWeatherResponse;
 import com.demo.soap.weather.UpdateWeatherRequest;
 import com.demo.soap.weather.UpdateWeatherResponse;
+import com.demo.soap.weather.WeatherImageRequest;
 
+import jakarta.activation.DataHandler;
 import soap.crud.demo.entities.WeatherEntity;
+import soap.crud.demo.entities.WeatherImageEntity;
+import soap.crud.demo.repositories.WeatherImageRepository;
 import soap.crud.demo.services.WeatherService;
 
 @Endpoint
@@ -27,17 +36,51 @@ public class WeatherEndpoint {
     @Autowired
     private WeatherService weatherService;
 
+    @Autowired
+    private WeatherImageRepository weatherImageRepository;
+
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "CreateWeatherRequest")
     @ResponsePayload
     public CreateWeatherResponse create(@RequestPayload CreateWeatherRequest request) {
+
+        // 1. save weather
         WeatherEntity entity = new WeatherEntity();
         entity.setLocation(request.getLocation());
         entity.setTemperature(request.getTemperature());
 
         WeatherEntity saved = weatherService.create(entity);
 
+        // 2. xử lý images (MTOM)
+        if (request.getImages() != null) {
+            for (WeatherImageRequest img : request.getImages()) {
+                try {
+                    DataHandler file = img.getFile();
+
+                    String fileName = UUID.randomUUID() + "_" + img.getFileName();
+                    Path path = Paths.get("uploads/" + fileName);
+
+                    Files.copy(file.getInputStream(), path);
+
+                    // save DB
+                    WeatherImageEntity imageEntity = new WeatherImageEntity();
+                    imageEntity.setFileName(fileName);
+                    imageEntity.setPath(path.toString());
+                    imageEntity.setWeather(saved);
+
+                    weatherImageRepository.save(imageEntity);
+
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        // 3. load lại weather + images
+        WeatherEntity full = weatherService.findById(saved.getId());
+
+        // 4. response
         CreateWeatherResponse res = new CreateWeatherResponse();
-        res.setWeather(weatherService.toSoap(saved));
+        res.setWeather(weatherService.toSoap(full));
 
         return res;
     }

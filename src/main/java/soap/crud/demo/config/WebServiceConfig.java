@@ -5,11 +5,18 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.ws.config.annotation.EnableWs;
+import org.springframework.ws.server.endpoint.adapter.method.MarshallingPayloadMethodProcessor;
+import org.springframework.ws.soap.saaj.SaajSoapMessageFactory;
 import org.springframework.ws.transport.http.MessageDispatcherServlet;
 import org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition;
 import org.springframework.xml.xsd.SimpleXsdSchema;
 import org.springframework.xml.xsd.XsdSchema;
+
+import jakarta.xml.soap.MessageFactory;
+import jakarta.xml.soap.SOAPConstants;
+import jakarta.xml.soap.SOAPException;
 
 @EnableWs
 @Configuration
@@ -21,10 +28,19 @@ public class WebServiceConfig {
             ApplicationContext context) {
 
         MessageDispatcherServlet servlet = new MessageDispatcherServlet();
+
         servlet.setApplicationContext(context);
         servlet.setTransformWsdlLocations(true);
 
         return new ServletRegistrationBean<>(servlet, "/ws/*");
+    }
+
+    @Bean
+    public SaajSoapMessageFactory messageFactory() throws SOAPException {
+
+        MessageFactory saaj = MessageFactory.newInstance(SOAPConstants.SOAP_1_2_PROTOCOL);
+
+        return new SaajSoapMessageFactory(saaj);
     }
 
     // 📌 expose WSDL
@@ -44,7 +60,27 @@ public class WebServiceConfig {
     @Bean
     public XsdSchema weatherSchema() {
         return new SimpleXsdSchema(
-                new ClassPathResource("xsd/weather.xsd")
-        );
+                new ClassPathResource("xsd/weather.xsd"));
+    }
+
+    @Bean
+    public Jaxb2Marshaller marshaller() {
+        Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
+        marshaller.setContextPath("com.demo.soap.weather"); // package generated
+        marshaller.setMtomEnabled(true);
+
+        return marshaller;
+    }
+
+    @Bean
+    public MarshallingPayloadMethodProcessor methodProcessor() {
+        return new MarshallingPayloadMethodProcessor(marshaller());
+    }
+
+    @Bean
+    public org.springframework.ws.server.endpoint.adapter.MessageEndpointAdapter messageEndpointAdapter(
+            Jaxb2Marshaller marshaller) {
+
+        return new org.springframework.ws.server.endpoint.adapter.MessageEndpointAdapter();
     }
 }
