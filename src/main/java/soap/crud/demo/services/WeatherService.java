@@ -8,11 +8,13 @@ import org.springframework.stereotype.Service;
 import com.demo.soap.weather.Weather;
 import com.demo.soap.weather.WeatherImage;
 
+import jakarta.xml.ws.soap.MTOM;
 import soap.crud.demo.entities.WeatherEntity;
 import soap.crud.demo.entities.WeatherImageEntity;
 import soap.crud.demo.repositories.WeatherRepository;
 
 @Service
+@MTOM
 public class WeatherService {
     private final WeatherRepository repo;
 

@@ -51,6 +51,8 @@ public class WebServiceConfig {
         wsdl.setPortTypeName("WeatherPort");
         wsdl.setLocationUri("/ws");
         wsdl.setTargetNamespace("http://soap.demo.com/weather");
+        wsdl.setCreateSoap12Binding(true); // 👈 QUAN TRỌNG
+        wsdl.setCreateSoap11Binding(false); // optional
         wsdl.setSchema(weatherSchema);
 
         return wsdl;

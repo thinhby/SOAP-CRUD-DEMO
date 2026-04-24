@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
@@ -29,6 +30,7 @@ import soap.crud.demo.repositories.WeatherImageRepository;
 import soap.crud.demo.services.WeatherService;
 
 @Endpoint
+@Validated
 public class WeatherEndpoint {
     private static final String NAMESPACE_URI = "http://soap.demo.com/weather";
     private static final String DELETED_MESSAGE = "deleted successfully";
@@ -55,6 +57,7 @@ public class WeatherEndpoint {
             for (WeatherImageRequest img : request.getImages()) {
                 try {
                     DataHandler file = img.getFile();
+                    System.out.println(file.getContentType());
 
                     String fileName = UUID.randomUUID() + "_" + img.getFileName();
                     Path path = Paths.get("uploads/" + fileName);
@@ -65,6 +68,7 @@ public class WeatherEndpoint {
                     WeatherImageEntity imageEntity = new WeatherImageEntity();
                     imageEntity.setFileName(fileName);
                     imageEntity.setPath(path.toString());
+                    imageEntity.setFileSize(img.getSize());
                     imageEntity.setWeather(saved);
 
                     weatherImageRepository.save(imageEntity);
@@ -111,7 +115,12 @@ public class WeatherEndpoint {
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "DeleteWeatherRequest")
     @ResponsePayload
     public DeleteWeatherResponse delete(@RequestPayload DeleteWeatherRequest request) {
-        weatherService.delete(request.getId());
+        WeatherEntity entity = weatherService.get(request.getId());
+        if (entity == null) {
+            throw new RuntimeException("Weather not found id=" + request.getId());
+        }
+
+        weatherService.delete(entity.getId());
         DeleteWeatherResponse res = new DeleteWeatherResponse();
         res.setMessage(DELETED_MESSAGE);
 

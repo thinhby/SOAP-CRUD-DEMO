@@ -6,6 +6,7 @@ import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -47,7 +48,7 @@ public class WeatherEntity {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "weather", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Size(max = 3)
+    @OneToMany(mappedBy = "weather", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Size(max = 3, message = "Each weather can have maximum 3 images")
     private List<WeatherImageEntity> images;
 }
